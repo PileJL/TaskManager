@@ -5,6 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = (req, res, next) => {
   const token = req.header('Authorization');
+  
   if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
 
   try {
@@ -12,6 +13,6 @@ module.exports = (req, res, next) => {
     req.user = decoded; // Attach decoded user to request
     next();
   } catch (error) {
-    res.status(400).json({ error: 'Invalid token' });
+    return res.status(401).json({ error: 'Invalid or expired token' });
   }
 };

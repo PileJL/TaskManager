@@ -1,5 +1,6 @@
 const express = require('express');
 const { userDb } = require('../couchdb'); // Import only user database
+const bcrypt = require('bcryptjs');
 
 const router = express.Router();
 
@@ -7,11 +8,17 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const { rows } = await userDb.list({ include_docs: true });
-    res.json(rows.map(row => row.doc));
+    const users = rows.map(row => {
+      const { password, ...userWithoutPassword } = row.doc; // Exclude password
+      return userWithoutPassword;
+    });
+
+    res.json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // ✅ Get a single user by ID
 router.get('/:id', async (req, res) => {
@@ -26,8 +33,14 @@ router.get('/:id', async (req, res) => {
 // ✅ Create a new user
 router.post('/', async (req, res) => {
   try {
-    const newUser = req.body; // Expecting JSON input
+    let { name, email, password } = req.body;
+    
+    // Hash the password before storing it
+    password = await bcrypt.hash(password, 10);
+
+    const newUser = { name, email, password };
     const response = await userDb.insert(newUser);
+    
     res.status(201).json(response);
   } catch (error) {
     res.status(500).json({ error: error.message });

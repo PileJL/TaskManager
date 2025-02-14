@@ -38,17 +38,30 @@ router.get('/user/:userId', authMiddleware, async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+  
 
 // ✅ Create a new task
 router.post('/', authMiddleware, async (req, res) => {
   try {
-    const newTask = req.body; // Expecting JSON input
+    const { title, description, dueDate, completed } = req.body;
+
+    const newTask = {
+      title,
+      description,
+      dueDate,
+      completed: completed ?? false, // ✅ Ensure 'completed' is always present
+      user_id: req.user.id // Auto-assign user_id
+    };
+
     const response = await taskDb.insert(newTask);
-    res.status(201).json(response);
+    res.status(201).json({ ...newTask, _id: response.id, _rev: response.rev });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+  
+
 
 // ✅ Update an existing task by ID
 router.put('/:id', authMiddleware, async (req, res) => {
@@ -72,5 +85,19 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// ✅ Mark a task as complete
+router.patch('/:id/complete', authMiddleware, async (req, res) => {
+  try {
+    const task = await taskDb.get(req.params.id); // Get the task by ID
+    task.completed = true; // Update the completed status
+
+    const response = await taskDb.insert(task); // Save the updated task
+    res.json(response);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 module.exports = router;

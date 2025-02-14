@@ -1,0 +1,36 @@
+version: '3.8'  # Use Docker Compose version 3.8
+
+services:
+  task-manager:  # Angular app container
+    build: ./task-manager  # Path to Angular project
+    ports:
+      - "8080:80"  # Expose Angular app on localhost:8080
+    depends_on:
+      - api  # Ensure the API starts before the Angular app
+    networks:
+      - app-network
+
+  api:  # Node.js API container
+    build: ./API  # Path to Node.js API project
+    ports:
+      - "3000:3000"  # Expose API on localhost:3000
+    environment:
+      - COUCHDB_URL=http://admin:admin@couchdb:5984  # CouchDB connection string
+    depends_on:
+      - couchdb  # Ensure CouchDB starts before the API
+    networks:
+      - app-network
+
+  couchdb:  # CouchDB database container
+    image: couchdb:3.2  # Use official CouchDB image
+    ports:
+      - "5984:5984"  # Expose CouchDB on localhost:5984
+    environment:
+      - COUCHDB_USER=admin  # Set CouchDB admin username
+      - COUCHDB_PASSWORD=admin  # Set CouchDB admin password
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge  # Creates a virtual network for all services to communicate

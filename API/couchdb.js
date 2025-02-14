@@ -1,4 +1,4 @@
-const nano = require('nano')('http://jlpile:jl0106@localhost:5984'); 
+const nano = require('nano')('http://admin:admin@couchdb:5984'); 
 // Replace with your CouchDB credentials if needed
 
 // Connect to both databases

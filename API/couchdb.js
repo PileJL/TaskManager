@@ -1,5 +1,6 @@
-const nano = require('nano')('http://jlpile:jl0106@localhost:5984'); 
-// Replace with your CouchDB credentials if needed
+const COUCHDB_URL = process.env.COUCHDB_URL || 'http://localhost:5984'; // Default to local if not set
+const nano = require('nano')(COUCHDB_URL);
+
 
 // Database names
 const databases = ['taskmanager_user', 'taskmanager_task'];

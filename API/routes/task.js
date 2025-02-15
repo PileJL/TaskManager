@@ -23,21 +23,21 @@ router.get('/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ Get tasks by user_id
-router.get('/user/:userId', authMiddleware, async (req, res) => {
-    try {
-      const { rows } = await taskDb.list({ include_docs: true });
-  
-      // Filter tasks that belong to the given userId
-      const userTasks = rows
-        .map(row => row.doc)
-        .filter(task => task.user_id === req.params.userId);
-  
-      res.json(userTasks);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+  // ✅ Get tasks by user_id
+  router.get('/user/:userId', authMiddleware, async (req, res) => {
+      try {
+        const { rows } = await taskDb.list({ include_docs: true });
+    
+        // Filter tasks that belong to the given userId
+        const userTasks = rows
+          .map(row => row.doc)
+          .filter(task => task.user_id === req.params.userId);
+    
+        res.json(userTasks);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
   
 
 // ✅ Create a new task

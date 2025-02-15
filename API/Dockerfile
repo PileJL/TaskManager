@@ -4,11 +4,13 @@ FROM node:22
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy package files first (better for caching)
 COPY package.json package-lock.json ./
-RUN npm install
 
-# Copy the rest of the Node.js project into the container
+# Install dependencies
+RUN npm install --only=production
+
+# Copy the rest of the application files
 COPY . .
 
 # Expose port 3000 so the API can be accessed

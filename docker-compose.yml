@@ -9,17 +9,19 @@ services:
       - api  # Ensure the API starts before the Angular app
     networks:
       - app-network
+    restart: always  # ⚡ Ensures container restarts if it crashes
 
   api:  # Node.js API container
     build: ./API  # Path to Node.js API project
     ports:
       - "3000:3000"  # Expose API on localhost:3000
     environment:
-      - COUCHDB_URL=http://admin:admin@couchdb:5984  # CouchDB connection string
+      - COUCHDB_URL=http://couchdb:5984  # ⚡ Use service name `couchdb` (inside Docker network)
     depends_on:
       - couchdb  # Ensure CouchDB starts before the API
     networks:
       - app-network
+    restart: always  # ⚡ Auto-restart if the container stops
 
   couchdb:  # CouchDB database container
     image: couchdb:3.2  # Use official CouchDB image
@@ -30,6 +32,7 @@ services:
       - COUCHDB_PASSWORD=admin  # Set CouchDB admin password
     networks:
       - app-network
+    restart: always  # ⚡ Auto-restart if CouchDB crashes
 
 networks:
   app-network:

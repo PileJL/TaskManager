@@ -1,0 +1,4 @@
+<h1>Your Tasks</h1>
+<div class="col-sm-4" *ngFor="let task of taskList">
+  <app-task [task]="task" (taskDeleted)="onTaskDeleted($event)"></app-task>
+</div>

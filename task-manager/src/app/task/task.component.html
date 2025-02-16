@@ -1,0 +1,11 @@
+<h2>{{ task?.title }}</h2>
+<p><b>Description:</b> {{ task?.description }}</p>
+<p><b>Due Date:</b> {{ formattedDueDate }}</p>
+<p><b>Status:</b> {{ task?.completed ? 'Completed' : 'Incomplete' }}</p>
+
+<!-- ✅ Show "Mark as Complete" only if task is incomplete -->
+<button *ngIf="!task?.completed" (click)="markAsComplete()" class="btn btn-success">Mark as Complete</button> <br><br>
+<button [routerLink]="['/edit-task', task?._id]" class="btn btn-primary mx-2">Edit Task</button> &nbsp;
+<button (click)="deleteTask()" class="btn btn-danger mx-2">Delete</button>
+
+<hr>

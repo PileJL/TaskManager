@@ -1,5 +1,6 @@
 const COUCHDB_URL = process.env.COUCHDB_URL || 'http://localhost:5984'; // Default to local if not set
 const nano = require('nano')(COUCHDB_URL);
+// const nano = require('nano')('http://jlpile:jl0106@localhost:5984'); 
 
 
 // Database names

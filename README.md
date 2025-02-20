@@ -5,5 +5,6 @@ A Task Manager App that allows users to perform CRUD operation on Tasks that are
 
 To run the app:
 - make sure Docker Desktop is running
-- open terminal and go to TaskManager folder (API and Angular app root directory) and run docker-compose up --build -d
-- go to http://localhost:8080
+- pull the images at https://hub.docker.com/r/pilejl/task-manager/tags
+- go to the directory of docker-compose.yml and run docker-compose up -d
+- go to http://localhost:8081

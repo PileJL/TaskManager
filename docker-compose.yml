@@ -1,16 +1,14 @@
-version: '3.8'
-
 services:
   task-manager:
-    build: ./task-manager
+    image: pilejl/task-manager:latest_angular_app  # Use pulled image instead of building
     ports:
-      - "8080:80"
+      - "8081:80"
     networks:
       - app-network
     restart: always
 
   api:
-    build: ./API
+    image: pilejl/task-manager:latest_API
     ports:
       - "3000:3000"
     environment:
@@ -23,7 +21,7 @@ services:
     restart: always
 
   couchdb:
-    image: couchdb:3.2
+    image: pilejl/task-manager:latest_DB
     ports:
       - "5984:5984"
     environment:

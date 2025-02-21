@@ -1,10 +1,9 @@
+version: '3.8'
 services:
   task-manager:
     image: pilejl/task-manager:latest_angular_app  # Use pulled image instead of building
     ports:
       - "8081:80"
-    networks:
-      - app-network
     restart: always
 
   api:
@@ -16,8 +15,6 @@ services:
     depends_on:
       couchdb:
         condition: service_healthy
-    networks:
-      - app-network
     restart: always
 
   couchdb:
@@ -27,14 +24,8 @@ services:
     environment:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=admin
-    networks:
-      - app-network
     restart: always
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5984"]
       interval: 5s
       retries: 5
-
-networks:
-  app-network:
-    driver: bridge
